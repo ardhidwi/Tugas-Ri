@@ -1,15 +1,20 @@
-# sleepify_app
+# Nama Aplikasi
 
-A new Flutter project.
+Sleepify
 
 ## Deskripsi Aplikasi
 
-Sleepify adalah aplikasi pemantau dan pengatur waktu tidur cerdas yang dirancang untuk mendukung kualitas istirahat penggunanya secara lebih optimal. Dengan fitur alarm tidur yang intuitif serta notifikasi otomatis, Sleepify membantu memastikan pengguna mendapatkan waktu tidur yang teratur dan cukup setiap harinya.
+  Sleepify adalah aplikasi pemantau dan pengatur waktu tidur yang dikembangkan untuk membantu pengguna mencapai kualitas tidur yang lebih baik dan menjaga kebiasaan tidur yang sehat. Aplikasi ini dirancang secara khusus untuk memberikan pengalaman tidur yang lebih teratur, nyaman, dan terukur melalui berbagai fitur yang mendukung rutinitas tidur sehari-hari.
+  Dengan antarmuka yang modern, intuitif, dan user-friendly, Sleepify memberikan kemudahan bagi pengguna untuk mengatur jadwal tidur sesuai kebutuhan mereka hanya dalam beberapa sentuhan. Fitur Alarm Tidur Cerdas memungkinkan pengguna menentukan waktu tidur ideal, lengkap dengan notifikasi otomatis, mode getaran, dan alarm suara untuk memastikan pengguna benar-benar terbangun di waktu yang sudah direncanakan.
+  Sleepify juga dilengkapi Dashboard Statistik Tidur yang memungkinkan pengguna memantau status alarm serta perkembangan konsistensi kebiasaan tidur. Data yang disimpan akan menampilkan pola tidur pengguna seiring waktu, sehingga mereka dapat mengevaluasi efektivitas jadwal tidur yang diterapkan.
+  Selain itu, fitur Pengelolaan Profil Pengguna memberikan personalisasi pada aplikasi. Pengguna dapat memperbarui informasi tidur, preferensi tampilan termasuk Mode Gelap (Dark Mode) untuk pengalaman visual yang nyaman di malam hari.
+  Dengan fitur-fitur yang terus dikembangkan seperti tracker jam tidur, dan dukungan sistem notifikasi background service, Sleepify diharapkan mampu menjadi asisten tidur pribadi yang membantu pengguna mengurangi risiko kurang tidur, meningkatkan produktivitas, dan menjaga kesehatan secara keseluruhan.
+  Sleepify bukan sekadar aplikasi alarm biasa, tetapi solusi inovatif yang mendampingi pengguna menuju gaya hidup yang lebih sehat melalui pemantauan dan kebiasaan tidur yang teratur — karena tidur yang berkualitas adalah kunci kesejahteraan hidup.
 
-Kelas Rekayasa Interaksi D
-1. Ardhi Dwi Setyawan (202210370311169)
-2. Akhmad Zaini (202210370311166)
-3. Zulfa Mirza Al-Auzai (202210370311172)
+## Kelas Rekayasa Interaksi D
+1. Ardhi Dwi Setyawan (202210370311169) -> github username : ardhidwi
+2. Akhmad Zaini (202210370311166) -> github username : Zenith
+3. Zulfa Mirza Al-Auzai (202210370311172) -> github username : Zulfamirza22
 
 ## link Figma
 https://www.figma.com/design/SYdChs8POz0hDvBKUyzv3Z/Sleeplify-Rekayasa-Interaksi?node-id=0-1&p=f&t=78M8ReBLk2dtVdNj-0
