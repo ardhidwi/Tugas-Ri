@@ -45,7 +45,9 @@ https://www.figma.com/design/SYdChs8POz0hDvBKUyzv3Z/Sleeplify-Rekayasa-Interaksi
 | 10 | Validasi input dan Snackbar pada Login & Alarm       | C     | Ardhi Dwi Setyawan   | 202210370311169 | Todo        |
 | 11 | Dokumentasi laporan proyek & deskripsi aplikasi      | C     | Akhmad Zaini         | 202210370311166 | Todo        |
 | 12 | Pembuatan poster/banner presentasi                   | C     | Zulfa Mirza Al-Auzai | 202210370311172 | Todo        |
-
+| 13 | Menambahkan firebase                                 | A     | Akhmad Zaini         | 202210370311166 | Todo        |
+| 14 | Menambahkan API jam                                  | A     | Akhmad Zaini         | 202210370311166 | Todo        |
+| 15 | Penambahan fitur jam dengan API                      | B     | Akhmad Zaini         | 202210370311166 | Todo        |
 
 A few resources to get you started if this is your first Flutter project:
 
