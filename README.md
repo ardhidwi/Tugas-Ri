@@ -7,8 +7,8 @@ Sleepify
 Sleepify adalah aplikasi pemantau dan pengatur waktu tidur cerdas yang dirancang untuk mendukung kualitas istirahat penggunanya secara lebih optimal. Dengan fitur alarm tidur yang intuitif serta notifikasi otomatis, Sleepify membantu memastikan pengguna mendapatkan waktu tidur yang teratur dan cukup setiap harinya.
 
 ## Kelas Rekayasa Interaksi D
-1. Ardhi Dwi Setyawan (202210370311169) -> github username : ardhidwi
-2. Akhmad Zaini (202210370311166) -> github username : Zenith
+1. Akhmad Zaini (202210370311166) -> github username : Zenith
+2. Ardhi Dwi Setyawan (202210370311169) -> github username : ardhidwi
 3. Zulfa Mirza Al-Auzai (202210370311172) -> github username : Zulfamirza22
 
 ## link Figma
@@ -32,7 +32,6 @@ https://www.figma.com/design/SYdChs8POz0hDvBKUyzv3Z/Sleeplify-Rekayasa-Interaksi
 
 ## Tabel pembagian tugas (backlog) 
 | No | Fitur / Task                                         | Level | Penanggung Jawab     | NIM             | Status      |
-| -- | ---------------------------------------------------- | ----- | -------------------- | --------------- | ----------- |
 | 1  | Perancangan konsep aplikasi, struktur folder project | C     | Ardhi Dwi Setyawan   | 202210370311169 | Done        |
 | 2  | Desain UI Login (tanpa integrasi)                    | B     | Akhmad Zaini         | 202210370311166 | Done        |
 | 3  | Implementasi Login View + Routing awal               | B     | Zulfa Mirza Al-Auzai | 202210370311172 | Done        |
