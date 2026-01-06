@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "329888551934",
+    "project_id": "sleepify-b91e9",
+    "storage_bucket": "sleepify-b91e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329888551934:android:924a40d924898fabbd66af",
+        "android_client_info": {
+          "package_name": "com.example.sleepify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFinE576eumWo6U23Tj4iVQeDf730aP-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
