@@ -4,7 +4,7 @@ import 'package:sleepify/routes/app_routes.dart';
 import '../controllers/login_controller.dart';
 
 class LoginView extends StatelessWidget {
-  // Inisialisasi controller menggunakan Get.put
+  // Inisialisasi controller
   final LoginController controller = Get.put(LoginController());
 
   LoginView({super.key});
@@ -42,7 +42,7 @@ class LoginView extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    // Gambar Bulan (ASSETS)
+                    // --- BAGIAN LOGO LOKAL (MENGGANTIKAN IMAGE.NETWORK) ---
                     Container(
                       height: 160,
                       width: 160,
@@ -56,15 +56,13 @@ class LoginView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // Memanggil moon.png dari folder assets
-                        child: Image.asset(
-                        'assets/images/moon.png', // Tambahkan /images/
+                      child: Image.asset(
+                        'assets/images/logo.png', // Aset lokal sesuai pubspec.yaml
                         fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(Icons.broken_image, size: 50, color: Colors.white);
-                        },
                       ),
                     ),
+
+                    // -------------------------------------------------------
                     const SizedBox(height: 40),
 
                     // Input Fields
@@ -108,7 +106,7 @@ class LoginView extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 8,
-                              vertical: 4,
+                              vertical: 2,
                             ),
                             decoration: BoxDecoration(
                               color: Colors.orange.shade400,
@@ -118,8 +116,7 @@ class LoginView extends StatelessWidget {
                               "Register",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
                               ),
                             ),
                           ),
@@ -185,19 +182,18 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  // --- Helper Widgets ---
-
+  // Helper UI
   Widget _buildLabel(String label) => Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-        ),
-      );
+    alignment: Alignment.centerLeft,
+    child: Text(
+      label,
+      style: const TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+      ),
+    ),
+  );
 
   Widget _buildTextField({
     required TextEditingController controller,
@@ -232,12 +228,12 @@ class LoginView extends StatelessWidget {
   }
 
   Widget _socialButton(IconData icon, Color color) => Container(
-        width: 80,
-        height: 50,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Icon(icon, color: Colors.white, size: 30),
-      );
+    width: 80,
+    height: 50,
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Icon(icon, color: Colors.white, size: 30),
+  );
 }

@@ -47,7 +47,7 @@ class RegisterView extends GetView<RegisterController> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Ilustrasi Bulan
+                  // --- BAGIAN LOGO LOKAL ---
                   Center(
                     child: Container(
                       height: 160,
@@ -56,29 +56,25 @@ class RegisterView extends GetView<RegisterController> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withOpacity(0.15),
                             blurRadius: 40,
                             spreadRadius: 5,
                           ),
                         ],
                       ),
-                        child: Image.asset(
-                        'assets/images/moon.png', // Tambahkan /images/
+                      child: Image.asset(
+                        'assets/images/logo.png', // Menggunakan aset lokal Anda
                         fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(Icons.broken_image, size: 50, color: Colors.white);
-                        },
+                        // Jika logo transparan, warna bayangan di atas akan memberi efek glow
                       ),
                     ),
                   ),
                   const SizedBox(height: 40),
 
-                  // FORM INPUT - Terhubung ke TextEditingController
                   _buildLabel("User Name"),
                   _buildTextField(
                     hint: "User name",
-                    controller:
-                        controller.usernameController, // Pakai Controller
+                    controller: controller.usernameController,
                   ),
                   const SizedBox(height: 15),
 
@@ -86,7 +82,7 @@ class RegisterView extends GetView<RegisterController> {
                   _buildTextField(
                     hint: "Email address",
                     keyboardType: TextInputType.emailAddress,
-                    controller: controller.emailController, // Pakai Controller
+                    controller: controller.emailController,
                   ),
                   const SizedBox(height: 15),
 
@@ -94,12 +90,10 @@ class RegisterView extends GetView<RegisterController> {
                   _buildTextField(
                     hint: "Password",
                     isPassword: true,
-                    controller:
-                        controller.passwordController, // Pakai Controller
+                    controller: controller.passwordController,
                   ),
                   const SizedBox(height: 40),
 
-                  // TOMBOL DAFTAR dengan Obx untuk memantau Loading
                   SizedBox(
                     width: double.infinity,
                     height: 55,
@@ -182,12 +176,12 @@ class RegisterView extends GetView<RegisterController> {
 
   Widget _buildTextField({
     required String hint,
-    required TextEditingController controller, // Gunakan TextEditingController
+    required TextEditingController controller,
     bool isPassword = false,
     TextInputType keyboardType = TextInputType.text,
   }) {
     return TextField(
-      controller: controller, // Hubungkan di sini
+      controller: controller,
       obscureText: isPassword,
       keyboardType: keyboardType,
       style: const TextStyle(color: Colors.black87),

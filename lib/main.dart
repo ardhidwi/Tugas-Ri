@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_core/firebase_core.dart'; // Tambahkan ini
-import 'package:firebase_auth/firebase_auth.dart'; // Tambahkan ini
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+// 1. TAMBAHKAN IMPORT ANALYTICS
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:workmanager/workmanager.dart';
@@ -14,15 +16,12 @@ import 'views/song_picker_page.dart';
 import 'modules/profile/controllers/profile_controller.dart';
 import 'routes/app_routes.dart';
 
-// Inisialisasi plugin notifikasi secara global
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-/// Fungsi ini berjalan di background saat waktu alarm tiba
 @pragma('vm:entry-point')
 void alarmCallback() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Pastikan binding siap di isolate terpisah
-
+  WidgetsFlutterBinding.ensureInitialized();
   try {
     String laguPilihan = await StorageService.ambilLagu();
     await AudioService.putarLagu(laguPilihan);
@@ -58,20 +57,20 @@ void callbackDispatcher() {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 1. INISIALISASI FIREBASE
+  // 2. INISIALISASI FIREBASE & ANALYTICS
   try {
     await Firebase.initializeApp();
+    // Mengaktifkan koleksi data analytics
+    await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   } catch (e) {
     print("Firebase init error: $e");
   }
 
-  // Inisialisasi Service Background (Hanya untuk Android)
   if (Platform.isAndroid) {
     await AndroidAlarmManager.initialize();
     await Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
   }
 
-  // Inisialisasi Notifikasi
   const AndroidInitializationSettings androidInit =
       AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -86,7 +85,6 @@ Future<void> main() async {
     print("Notifikasi tidak didukung: $e");
   }
 
-  // REGISTER PROFILE CONTROLLER GLOBAL
   Get.put(ProfileController(), permanent: true);
 
   runApp(const MyApp());
@@ -94,6 +92,12 @@ Future<void> main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  // 3. BUAT STATIC INSTANCE UNTUK ANALYTICS
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
+    analytics: analytics,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +110,10 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
       ),
 
-      // 2. LOGIKA AUTO LOGIN
-      // Jika FirebaseAuth mendeteksi ada user yang aktif, langsung ke Dashboard.
-      // Jika tidak ada user, arahkan ke halaman Login.
+      // 4. TAMBAHKAN NAVIGATOR OBSERVER
+      // Ini akan mencatat otomatis setiap kali user pindah halaman
+      navigatorObservers: [observer],
+
       initialRoute: FirebaseAuth.instance.currentUser != null
           ? AppRoutes.DASHBOARD_STATISTIK_TIDUR
           : AppRoutes.LOGIN,
