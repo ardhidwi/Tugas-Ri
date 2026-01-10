@@ -1,6 +1,6 @@
 {
-    "name": "sleepify_app",
-    "short_name": "sleepify_app",
+    "name": "sleepify",
+    "short_name": "sleepify",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

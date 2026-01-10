@@ -4,38 +4,43 @@ import 'package:get/get.dart';
 import '../controllers/home_nav_controller.dart';
 import '../../dashboard_statistik_tidur/views/dashboard_statistik_tidur_view.dart';
 import '../../tracker_tidur/views/tracker_tidur_view.dart';
-import '../../tracker_tidur/controllers/tracker_tidur_controller.dart'; // tambah ini
+import '../../tracker_tidur/controllers/tracker_tidur_controller.dart';
 import '../../alarm_tidur/views/alarm_tidur_view.dart';
 import '../../profile/views/profile_view.dart';
 
-
 class HomeNavView extends GetView<HomeNavController> {
-  const HomeNavView({Key? key}) : super(key: key);
+  const HomeNavView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final homeCtrl = controller; // HomeNavController from GetView
+    final homeCtrl = controller;
+
     return Obx(() {
       Widget page;
+
       switch (homeCtrl.selectedIndex.value) {
         case 0:
-          page = DashboardStatistikTidurView();
+          page = const DashboardStatistikTidurView();
           break;
+
         case 1:
-          // Pastikan TrackerTidurController sudah di-inject
+          // Inject controller bila belum ada
           if (!Get.isRegistered<TrackerTidurController>()) {
-            Get.put(TrackerTidurController());
+            Get.lazyPut(() => TrackerTidurController());
           }
           page = TrackerTidurView();
           break;
+
         case 2:
           page = AlarmTidurView();
           break;
+
         case 3:
-          page = ProfileView();
+          page = const ProfileView();
           break;
+
         default:
-          page = DashboardStatistikTidurView();
+          page = const DashboardStatistikTidurView();
       }
 
       return Scaffold(

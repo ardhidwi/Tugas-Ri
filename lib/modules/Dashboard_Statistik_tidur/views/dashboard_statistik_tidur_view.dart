@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:sleepify_app/modules/home_nav/controllers/home_nav_controller.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:sleepify/modules/home_nav/controllers/home_nav_controller.dart';
 import '../../../routes/app_routes.dart';
 import '../controllers/dashboard_statistik_tidur_controller.dart';
 import '../../profile/controllers/profile_controller.dart';
 import '../../tracker_tidur/views/tracker_tidur_view.dart';
 import '../../alarm_tidur/views/alarm_tidur_view.dart';
 import '../../profile/views/profile_view.dart';
-// HomeNavController imported via package import above
+import '../../tracker_tidur/controllers/tracker_tidur_controller.dart';
+import '../../alarm_tidur/controllers/alarm_tidur_controller.dart';
+import 'panduan_tidur_view.dart';
 
 class DashboardStatistikTidurView
     extends GetView<DashboardStatistikTidurController> {
@@ -16,224 +18,454 @@ class DashboardStatistikTidurView
 
   @override
   Widget build(BuildContext context) {
-    final ctrl = controller;
-    final profile = Get.find<ProfileController>();
     final navCtrl = Get.put(HomeNavController());
+    final ctrl = controller;
 
-    return Obx(() => Scaffold(
-          backgroundColor: const Color(0xFFE9F3FF),
-          body: _getBody(navCtrl.selectedIndex.value, ctrl, profile, context),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: navCtrl.selectedIndex.value,
-            onTap: navCtrl.changePage,
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: Colors.blueAccent,
-            unselectedItemColor: Colors.grey,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home), label: 'Dashboard'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.nights_stay), label: 'Tracker'),
-              BottomNavigationBarItem(icon: Icon(Icons.alarm), label: 'Alarm'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.person), label: 'Profile'),
-            ],
-          ),
-        ));
+    // Inisialisasi ProfileController secara aman
+    final profile = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController());
+
+    return Obx(
+      () => Scaffold(
+        extendBody: true,
+        body: Stack(
+          children: [
+            // Background Gradient Utama
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFF31007E), Color(0xFF13003B)],
+                ),
+              ),
+            ),
+            _getBody(navCtrl.selectedIndex.value, ctrl, profile, context),
+          ],
+        ),
+        bottomNavigationBar: _buildBottomNav(navCtrl),
+      ),
+    );
   }
 
-  Widget _getBody(int index, DashboardStatistikTidurController ctrl, profile,
-      BuildContext context) {
+  // --- LOGIKA PERPINDAHAN HALAMAN NAVIGASI ---
+  Widget _getBody(int index, ctrl, profile, context) {
     switch (index) {
       case 0:
         return _buildDashboardBody(ctrl, profile, context);
       case 1:
+        if (!Get.isRegistered<TrackerTidurController>())
+          Get.lazyPut(() => TrackerTidurController());
         return TrackerTidurView();
       case 2:
+        if (!Get.isRegistered<AlarmTidurController>())
+          Get.put(AlarmTidurController());
         return AlarmTidurView();
       case 3:
-        return ProfileView();
+        return const ProfileView();
       default:
         return _buildDashboardBody(ctrl, profile, context);
     }
   }
 
-  Widget _buildDashboardBody(
-      DashboardStatistikTidurController ctrl, profile, BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFE9F3FF),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          "Statistik Tidur",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            tooltip: 'Edit Profil',
-            onPressed: () => Get.toNamed(AppRoutes.EDIT_PROFILE),
-            icon: const Icon(Icons.edit, color: Colors.black54),
-          ),
-          IconButton(
-            tooltip: 'Atur Alarm',
-            onPressed: () => Get.toNamed(AppRoutes.ALARM_TIDUR),
-            icon: const Icon(Icons.alarm, color: Colors.black54),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+  // --- TAMPILAN UTAMA DASHBOARD ---
+  Widget _buildDashboardBody(ctrl, profile, context) {
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- User Info Card ---
-            Obx(() => Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  margin: const EdgeInsets.only(bottom: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 8,
-                        color: Colors.black12,
-                        offset: Offset(0, 4),
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      const CircleAvatar(
-                        radius: 28,
-                        backgroundColor: Colors.blueAccent,
-                        child:
-                            Icon(Icons.person, color: Colors.white, size: 32),
-                      ),
-                      const SizedBox(width: 16),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Selamat Datang,",
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.black54)),
-                          Text(profile.username.value,
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blueAccent)),
-                        ],
-                      ),
-                    ],
-                  ),
-                )),
-            // --- Statistik Card ---
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(22),
-                boxShadow: const [
-                  BoxShadow(
-                      blurRadius: 8,
-                      color: Colors.black12,
-                      offset: Offset(0, 4))
-                ],
-              ),
-              child: Column(
-                children: [
-                  CircularPercentIndicator(
-                    radius: 90,
-                    percent: (ctrl.qualityScore.value.toDouble() / 100.0)
-                        .clamp(0.0, 1.0),
-                    progressColor: Colors.blueAccent,
-                    lineWidth: 12,
-                    animation: true,
-                    circularStrokeCap: CircularStrokeCap.round,
-                    center: Text("${ctrl.qualityScore.value}%",
-                        style: const TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue)),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text("Kualitas Tidur",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w600)),
-                ],
-              ),
-            ),
+            const SizedBox(height: 10),
+            _buildCustomAppBar(),
+            const SizedBox(height: 25),
+            _buildMainChartCard(), // Grafik Line Chart
             const SizedBox(height: 20),
-            // --- Statistik kecil ---
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _statCard(
-                    icon: Icons.nights_stay,
-                    title: "Jam Tidur",
-                    value:
-                        "${ctrl.totalSleepHours.value.toStringAsFixed(1)} jam"),
-                _statCard(
-                    icon: Icons.bar_chart,
-                    title: "Efisiensi",
-                    value: "${ctrl.qualityScore.value}%"),
-              ],
-            ),
+            _buildSecondaryStats(), // Card Kembar (Persentase)
             const SizedBox(height: 20),
-            _statCard(
-                icon: Icons.bedtime,
-                title: "Durasi Ideal",
-                value: "8 Jam / Hari",
-                fullWidth: true),
-            const SizedBox(height: 30),
-            // ... Lanjutkan semua widget lainnya sama seperti sebelumnya
-            // Tracker, Riwayat, Rekomendasi Jam Tidur, Statistik Bulanan, Logout
+            _buildSleepDurationCard(), // Card Oranye Durasi Tidur
+            const SizedBox(height: 20),
+            _buildProblemSection(), // Masalah Tidur & Koala
+            const SizedBox(height: 110), // Spasi agar tidak tertutup Nav Bar
           ],
         ),
       ),
     );
   }
 
-  Widget _statCard(
-      {required IconData icon,
-      required String title,
-      required String value,
-      bool fullWidth = false}) {
-    return Container(
-      width: fullWidth ? double.infinity : 160,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(blurRadius: 10, color: Colors.black12, offset: Offset(0, 4))
-        ],
-      ),
-      child: Column(
-        children: [
-          Icon(icon, size: 32, color: Colors.blueAccent),
-          const SizedBox(height: 10),
-          Text(title,
-              style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.w600)),
-          const SizedBox(height: 6),
-          Text(value,
-              style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blueAccent)),
+  // --- APP BAR: JUDUL DI TENGAH & LOGOUT DI KANAN ---
+  Widget _buildCustomAppBar() {
+    return Row(
+      children: [
+        // Spacer kiri seukuran tombol kanan agar judul benar-benar di tengah
+        const SizedBox(width: 44),
+
+        const Expanded(
+          child: Center(
+            child: Text(
+              "Dashboard",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+
+        // Tombol Logout Ikon Panah
+        _appBarButton(Icons.logout, _showLogoutDialog),
+      ],
+    );
+  }
+
+  // DIALOG KONFIRMASI LOGOUT
+  void _showLogoutDialog() {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: const Color(0xFF13003B),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text(
+          "Konfirmasi Logout",
+          style: TextStyle(color: Colors.white),
+        ),
+        content: const Text(
+          "Apakah Anda yakin ingin keluar dari Sleepify?",
+          style: TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text("Batal", style: TextStyle(color: Colors.white38)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.redAccent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: () => Get.offAllNamed(AppRoutes.LOGIN),
+            child: const Text("Logout", style: TextStyle(color: Colors.white)),
+          ),
         ],
       ),
     );
   }
+
+  Widget _appBarButton(IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, color: Colors.white, size: 24),
+      ),
+    );
+  }
+
+  // --- GRAFIK UTAMA (FL CHART) ---
+  Widget _buildMainChartCard() {
+    return SizedBox(
+      height: 200,
+      child: LineChart(
+        LineChartData(
+          gridData: const FlGridData(show: false),
+          titlesData: FlTitlesData(
+            leftTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            rightTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: (value, meta) {
+                  const days = [
+                    'Sun',
+                    'Mon',
+                    'Tue',
+                    'Wed',
+                    'Thu',
+                    'Fri',
+                    'Sat',
+                  ];
+                  if (value.toInt() >= 0 && value.toInt() < 7) {
+                    return Text(
+                      days[value.toInt()],
+                      style: const TextStyle(
+                        color: Colors.white54,
+                        fontSize: 10,
+                      ),
+                    );
+                  }
+                  return const Text('');
+                },
+              ),
+            ),
+          ),
+          borderData: FlBorderData(show: false),
+          lineBarsData: [
+            LineChartBarData(
+              spots: const [
+                FlSpot(0, 3),
+                FlSpot(1, 4),
+                FlSpot(2, 3),
+                FlSpot(3, 5),
+                FlSpot(4, 4),
+                FlSpot(5, 7),
+                FlSpot(6, 6),
+              ],
+              isCurved: true,
+              color: Colors.orangeAccent,
+              barWidth: 3,
+              dotData: const FlDotData(show: true),
+              belowBarData: BarAreaData(
+                show: true,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.orangeAccent.withOpacity(0.3),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // --- CARD STATISTIK KEMBAR ---
+  Widget _buildSecondaryStats() {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildSmallChartCard(
+            "Perubahan Bulanan",
+            "32%",
+            Colors.greenAccent,
+            true,
+          ),
+        ),
+        const SizedBox(width: 15),
+        Expanded(
+          child: _buildSmallChartCard(
+            "Perubahan Mingguan",
+            "-26%",
+            Colors.redAccent,
+            false,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSmallChartCard(
+    String title,
+    String val,
+    Color color,
+    bool isUp,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(color: Colors.black54, fontSize: 11),
+          ),
+          const SizedBox(height: 5),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                val,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Icon(
+                isUp ? Icons.trending_up : Icons.trending_down,
+                color: color,
+                size: 18,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // --- CARD TIDUR SEMALAM (GRADIENT) ---
+  Widget _buildSleepDurationCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFF9D00), Color(0xFFFF3D91)],
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Tidur Semalam",
+            style: TextStyle(color: Colors.white70, fontSize: 14),
+          ),
+          const Text(
+            "6h 37m",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 10),
+          CustomPaint(
+            size: const Size(double.infinity, 20),
+            painter: WavePainter(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // --- BAGIAN MASALAH TIDUR & NAVIGASI PANDUAN ---
+  Widget _buildProblemSection() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Apakah ada masalah\nTidur?",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                // Navigasi Langsung ke Panduan Tidur
+                Get.to(() => const PanduanTidurView());
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white.withOpacity(0.2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                "Baca Panduan",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+        // Gambar Ilustrasi Koala
+        Image.network(
+          'https://cdn-icons-png.flaticon.com/512/3069/3069172.png',
+          height: 100,
+          errorBuilder: (context, error, stackTrace) => const Icon(
+            Icons.nightlight_round,
+            size: 80,
+            color: Colors.white24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // --- BOTTOM NAVIGATION BAR ---
+  Widget _buildBottomNav(HomeNavController navCtrl) {
+    return Container(
+      margin: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFF13003B),
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 10),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _navIcon(Icons.home_filled, 0, navCtrl),
+          _navIcon(Icons.bar_chart, 1, navCtrl),
+          _navIcon(Icons.alarm, 2, navCtrl),
+          _navIcon(Icons.person, 3, navCtrl),
+        ],
+      ),
+    );
+  }
+
+  Widget _navIcon(IconData icon, int index, HomeNavController navCtrl) {
+    return GestureDetector(
+      onTap: () => navCtrl.changePage(index),
+      child: Obx(
+        () => Icon(
+          icon,
+          color: navCtrl.selectedIndex.value == index
+              ? Colors.white
+              : Colors.white38,
+          size: 28,
+        ),
+      ),
+    );
+  }
+}
+
+// Painter untuk garis gelombang di card oranye
+class WavePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = Colors.white.withOpacity(0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    var path = Path();
+    path.moveTo(0, size.height / 2);
+    for (var i = 1; i <= 3; i++) {
+      path.quadraticBezierTo(
+        size.width * (i * 0.25 - 0.125),
+        0,
+        size.width * i * 0.25,
+        size.height / 2,
+      );
+      path.quadraticBezierTo(
+        size.width * (i * 0.25 + 0.125),
+        size.height,
+        size.width * (i + 1) * 0.25,
+        size.height / 2,
+      );
+    }
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

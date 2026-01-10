@@ -10,7 +10,7 @@ class TrackerTidurController extends GetxController {
     isSleeping.value = true;
     seconds.value = 0;
 
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       seconds.value++;
     });
   }
