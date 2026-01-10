@@ -37,10 +37,10 @@ class AlarmTidurView extends GetView<AlarmTidurController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: () => Get.back(),
-                      ),
+                      // IconButton(
+                      //   icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      //   onPressed: () => Get.back(),
+                      // ),
                       const Text(
                         "Alarm Tidur",
                         style: TextStyle(
@@ -196,7 +196,7 @@ class AlarmTidurView extends GetView<AlarmTidurController> {
                               ),
                               Switch(
                                 value: ctrl.isAlarmActive.value,
-                                activeColor: const Color(0xFFC85C7C),
+                                activeThumbColor: const Color(0xFFC85C7C),
                                 onChanged: (value) {
                                   if (value) {
                                     if (ctrl.selectedTime.value != null) {
