@@ -37,10 +37,10 @@ class AlarmTidurView extends GetView<AlarmTidurController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // IconButton(
-                      //   icon: const Icon(Icons.arrow_back, color: Colors.white),
-                      //   onPressed: () => Get.back(),
-                      // ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: () => Get.back(),
+                      ),
                       const Text(
                         "Alarm Tidur",
                         style: TextStyle(
